@@ -34,6 +34,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 noeud_courant->jeton = tableau_jeton[ind_operateur];
                 noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,0,ind_operateur),ind_operateur);
+                noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_operateur+1,taille),ind_operateur+1);
             }
             break;
         case OPERATEUR  : break;
@@ -49,8 +50,8 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             break;
         case ERREUR     : break;
         case FIN        : break;
-        case PAR_OUV    : printf("\nPAR_OUV"); break;
-        case PAR_FERM   : printf("\nPAR_FERM"); break;
+        case PAR_OUV    : break;
+        case PAR_FERM   : break;
         case VARIABLE   :
             printf("\nVARIABLE");
             ind_operateur = indice_operateur(tableau_jeton,taille);
@@ -62,6 +63,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 noeud_courant->jeton = tableau_jeton[ind_operateur];
                 noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,0,ind_operateur),ind_operateur);
+                noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_operateur+1,taille),ind_operateur+1);
             }
             break;
         case BAR_OUV    : break;
