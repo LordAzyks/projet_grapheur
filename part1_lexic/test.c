@@ -3,23 +3,23 @@
 #include <stdio.h>
 #include <string.h>
 
+void trim(char *origine)
+{
+    int count = 0;
 
-void trim(char *origine) 
-{ 
-    int count = 0; 
-  
-    for (int i = 0; origine[i]; i++) 
-        if (origine[i] != ' ') 
+    for (int i = 0; origine[i]; i++)
+    {
+        origine[i] = tolower(origine[i]);
+        if (origine[i] != ' ')
             origine[count++] = origine[i];
-
-    origine[count] = '\0'; 
-} 
+    }
+    origine[count] = '\0';
+}
 
 int main(void)
 {
-    char test[] = "test coucou tetetetetet ewqewqe ";
+    char test[] = "test coucou tetetEEEEEetetet ewqewqe ";
     trim(test);
-    printf("origine %s\n",test);
+    printf("origine %s\n", test);
     return 0;
 }
-
