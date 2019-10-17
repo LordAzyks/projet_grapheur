@@ -5,8 +5,9 @@
 
 int main(void)
 {
-    char test[] = "test coucou tetetEEEEEetetet ewqewqe ";
-    format_text(test);
-    printf("origine %s\n", test);
+    char test[] = "sin(220.20)";
+    decoupe_saisie(test);
+    //format_text(test);
+    //printf("origine %s\n", test);
     return 0;
 }
