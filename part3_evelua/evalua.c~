@@ -84,8 +84,7 @@ float** calculValeur(float borneMin, float borneMax, float pas, Arbre tri){
 	int nbValues;
 	nbValues = (borneMax-borneMin)/pas;
 	//float resultat[nbValues][2];
-	float** resultats;
-	resultats = (float**)malloc(nbValues*sizeof(float*));
+	float** resultats = (float**)malloc(nbValues*sizeof(float*));
 	
 	for(i=borneMin; i <= borneMax; i=i+pas){
 			resultats[j] = (float*)malloc(2*sizeof(float));			
