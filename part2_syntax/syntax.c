@@ -46,7 +46,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
                 exit(1);
             }
             noeud_courant->jeton = tableau_jeton[0];
-            noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,2,indice_derniere_par_ferm(tableau_jeton,taille)),indice_derniere_par_ferm(tableau_jeton,taille)-2);
+            noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,2,indice_derniere_par_ferm(tableau_jeton,taille,1)),indice_derniere_par_ferm(tableau_jeton,taille,1)-2);
             break;
         case ERREUR     : break;
         case FIN        : break;
@@ -86,16 +86,29 @@ typejeton* subtab(typejeton* tableau_jeton, int index_deb, int index_fin)
     return subtableau;
 }
 
-int indice_derniere_par_ferm(typejeton* tableau_jeton, int taille)
+int indice_derniere_par_ferm(typejeton* tableau_jeton, int taille,int indic_par_ouv)
 {
+    int nb_par_ouv=0;
     int indice_para_ferm=-1;
     int i_jeton;
     for (i_jeton=taille-1;i_jeton>=0;i_jeton--)
     {
+        if (tableau_jeton[i_jeton].lexem==PAR_OUV)
+        {
+            nb_par_ouv++;
+        }
         if (tableau_jeton[i_jeton].lexem==PAR_FERM)
         {
-            indice_para_ferm = i_jeton;
-            break;
+            if (nb_par_ouv==0)
+            {
+                indice_para_ferm = i_jeton;
+                break;
+            }
+            else
+            {
+                nb_par_ouv--;
+            }
+
         }
     }
     return indice_para_ferm;
