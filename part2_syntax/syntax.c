@@ -35,7 +35,9 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 noeud_courant->jeton = tableau_jeton[ind_operateur];
                 noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,0,ind_operateur),ind_operateur+1);
+
                 noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_operateur+1,taille),taille-ind_operateur);
+                printf("\nprec:%d\tsuiv:%d",noeud_courant->pjeton_preced->jeton.lexem,noeud_courant->pjeton_suiv->jeton.lexem);
             }
             break;
         case OPERATEUR  : break;
@@ -44,6 +46,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             if (tableau_jeton[1].lexem!=PAR_OUV)
             {
                 noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
+                printf("\nlexem exit : %d",tableau_jeton[1].lexem);
                 exit(1);
             }
             ind_par_ferm = indice_derniere_par_ferm(tableau_jeton,taille,1);
@@ -55,9 +58,9 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
                     noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
                     exit(1);
                 }
+
                 noeud_courant->jeton = tableau_jeton[ind_par_ferm+1];
-                noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,0,ind_par_ferm+1),ind_par_ferm+1);
-                if (noeud_courant->pjeton_preced->jeton.lexem==FONCTION) printf("\nOUI");
+                noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,0,ind_par_ferm+1),ind_par_ferm+2);
                 noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_par_ferm+2,taille),taille-ind_par_ferm-1);
             }
             else
@@ -78,11 +81,13 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 noeud_courant->jeton = tableau_jeton[ind_par_ferm+1];
                 noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,1,ind_par_ferm),ind_par_ferm);
+
                 noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_par_ferm+2,taille),taille-ind_par_ferm-1);
             }
             if (tableau_jeton[ind_par_ferm+1].lexem==FIN)
             {
-                noeud_courant = creation_noeud(subtab(tableau_jeton,1,taille-1),taille-1);
+                free(noeud_courant);
+                noeud_courant = creation_noeud(subtab(tableau_jeton,1,taille-1),taille+1);
             }
             break;
         case PAR_FERM   : break;
@@ -115,10 +120,15 @@ typejeton* subtab(typejeton* tableau_jeton, int index_deb, int index_fin)
     int i_jeton;
     for (i_jeton=index_deb; i_jeton<index_fin+1;i_jeton++)
     {
-        if (i_jeton=index_fin)
+        if (i_jeton==index_fin)
             subtableau[i_jeton-index_deb] = (typejeton){FIN,{0,NULL,NULL,NULL}};
         else
+        {
             subtableau[i_jeton-index_deb] = tableau_jeton[i_jeton];
+            if (subtableau[i_jeton-index_deb].lexem==FIN)
+                break;
+        }
+
     }
 
     return subtableau;
