@@ -5,7 +5,7 @@ int main() {
     printf("Hello le grapheur !\n");
     
     Arbre racine = (Arbre)malloc(sizeof(Node));
-    racine->jeton.valeur.operateur = PLUS;
+    racine->jeton.valeur.fonction = LOG;
     
     Arbre rc = (Arbre)malloc(sizeof(Node));
     rc->jeton.valeur.fonction = FOIS;

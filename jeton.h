@@ -16,6 +16,11 @@ typedef enum
     ABS,SIN,SQRT,LOG,COS,TAN,EXP,ENTIER,VAL_NEG,SINC
 }typefonction;
 
+typedef enum
+{
+	ARBRE,OPERATION
+}typeerreur;
+
 typedef union
 {
     float reel;

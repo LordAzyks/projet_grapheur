@@ -23,10 +23,20 @@ float preffixeArbre(Arbre arb, float var){
 					return sin(preffixeArbre(arb->pjeton_preced,var));
 					break;	
 				case SQRT:
-					return sqrt(preffixeArbre(arb->pjeton_preced,var));
+					if(preffixeArbre(arb->pjeton_preced,var)>=0) {
+						return sqrt(preffixeArbre(arb->pjeton_preced,var));
+					} else {
+						printf("Erreur : impossible de trouver la racine carree d'un nombre negatif");
+						return 0;
+					}
 					break;	
 				case LOG:
-					return log(preffixeArbre(arb->pjeton_preced,var));
+					if(preffixeArbre(arb->pjeton_preced,var)>0) {
+						return log(preffixeArbre(arb->pjeton_preced,var));
+					} else {
+						printf("Erreur : la valeur pour la fonction log() est inferieure ou egale a 0");
+						return 0;
+					}
 					break;	
 				case COS:
 					return cos(preffixeArbre(arb->pjeton_preced,var));
@@ -64,7 +74,12 @@ float preffixeArbre(Arbre arb, float var){
 					return preffixeArbre(arb->pjeton_preced,var)*preffixeArbre(arb->pjeton_suiv,var);
 					break;
 				case DIV:
-					return preffixeArbre(arb->pjeton_preced,var)/preffixeArbre(arb->pjeton_suiv,var);
+					if(preffixeArbre(arb->pjeton_suiv,var)!=0) {
+						return preffixeArbre(arb->pjeton_preced,var)/preffixeArbre(arb->pjeton_suiv,var);
+					} else {
+						printf("Erreur : la division par 0 est impossible");
+						return preffixeArbre(arb->pjeton_preced,var);
+					}					
 					break;
 				case PUIS:
 					return pow(preffixeArbre(arb->pjeton_preced,var),preffixeArbre(arb->pjeton_suiv,var));
@@ -84,12 +99,15 @@ float** calculValeur(float borneMin, float borneMax, float pas, Arbre tri){
 	int nbValues;
 	nbValues = (borneMax-borneMin)/pas;
 	//float resultat[nbValues][2];
-	float** resultats = (float**)malloc(nbValues*sizeof(float*));
+	float** resultats;
+	resultats = (float**)malloc(nbValues*sizeof(float*));
+	printf("BorneMin = %f, BorneMax = %f, Pas = %f\n",borneMin,borneMax,pas);	
 	
-	for(i=borneMin; i <= borneMax; i=i+pas){
+	for(i=borneMin; i<=borneMax; i=i+pas){
 			resultats[j] = (float*)malloc(2*sizeof(float));			
 			resultats[j][0] = i;
 			resultats[j][1] = preffixeArbre(tri, i);
+			printf("X = %f ; Valeur : %f\n",i,preffixeArbre(tri,i));
 			j++;
 	}
 	return resultats;
