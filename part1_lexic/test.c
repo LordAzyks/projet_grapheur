@@ -5,7 +5,7 @@
 
 int main(void)
 {
-    char test[] = "sin(220.20)";
+    char test[] = "sin(220.203 + 20)";
     format_text(test);
     decoupe_saisie(test);
     //printf("origine %s\n", test);
