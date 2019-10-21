@@ -1,14 +1,17 @@
 #include "evalua.h"
 
-
-
 float preffixeArbre(Arbre arb, float var){
 	
 	//valeur	
-	if(arb->pjeton_preced == NULL){
-		if(arb->jeton.lexem == REEL) {
-			return arb->jeton.valeur.reel;
-		} else {
+	if(arb->pjeton_preced == NULL){ 
+		if(arb->jeton.lexem == REEL) { //si la valeur est un reel
+			//if(arb->jeton.valeur.reel != NULL) { //si le reel n'est pas nul, on le retourne
+				return arb->jeton.valeur.reel;
+			/*} else { //sinon, on retourne 0
+				printf("Erreur : le reel est nul\n");
+				return 0;
+			}*/
+		} else { //si la valeur est x, on le retourne
 			return var;
 		}
 	} else {
@@ -23,20 +26,20 @@ float preffixeArbre(Arbre arb, float var){
 					return sin(preffixeArbre(arb->pjeton_preced,var));
 					break;	
 				case SQRT:
-					if(preffixeArbre(arb->pjeton_preced,var)>=0) {
+					//if(preffixeArbre(arb->pjeton_preced,var)>=0) {
 						return sqrt(preffixeArbre(arb->pjeton_preced,var));
-					} else {
-						printf("Erreur : impossible de trouver la racine carree d'un nombre negatif");
+					/*} else {
+						printf("Erreur : impossible de trouver la racine carree d'un nombre negatif\n");
 						return 0;
-					}
+					}*/
 					break;	
 				case LOG:
-					if(preffixeArbre(arb->pjeton_preced,var)>0) {
+					//if(preffixeArbre(arb->pjeton_preced,var)>0) {
 						return log(preffixeArbre(arb->pjeton_preced,var));
-					} else {
-						printf("Erreur : la valeur pour la fonction log() est inferieure ou egale a 0");
+					/*} else {
+						printf("Erreur : la valeur pour la fonction log() est inferieure ou egale a 0\n");
 						return 0;
-					}
+					}*/
 					break;	
 				case COS:
 					return cos(preffixeArbre(arb->pjeton_preced,var));
@@ -77,7 +80,7 @@ float preffixeArbre(Arbre arb, float var){
 					if(preffixeArbre(arb->pjeton_suiv,var)!=0) {
 						return preffixeArbre(arb->pjeton_preced,var)/preffixeArbre(arb->pjeton_suiv,var);
 					} else {
-						printf("Erreur : la division par 0 est impossible");
+						printf("Erreur : la division par 0 est impossible\n");
 						return preffixeArbre(arb->pjeton_preced,var);
 					}					
 					break;
@@ -107,7 +110,7 @@ float** calculValeur(float borneMin, float borneMax, float pas, Arbre tri){
 			resultats[j] = (float*)malloc(2*sizeof(float));			
 			resultats[j][0] = i;
 			resultats[j][1] = preffixeArbre(tri, i);
-			printf("X = %f ; Valeur : %f\n",i,preffixeArbre(tri,i));
+			//printf("X = %f ; Valeur : %f\n",i,preffixeArbre(tri,i));
 			j++;
 	}
 	return resultats;
