@@ -6,8 +6,8 @@
 int main(void)
 {
     char test[] = "sin(220.20)";
+    format_text(test);
     decoupe_saisie(test);
-    //format_text(test);
     //printf("origine %s\n", test);
     return 0;
 }
