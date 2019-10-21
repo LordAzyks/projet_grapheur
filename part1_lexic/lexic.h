@@ -5,5 +5,5 @@
 #include "../jeton.h"
 
 void format_text(char *origine);
-void decoupe_saisie(char *entree);
+typejeton* decoupe_saisie(char *entree);
 typejeton* creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur valeur, int *taille);

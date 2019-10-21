@@ -13,22 +13,21 @@ void format_text(char *origine)
     origine[count] = '\0';
 }
 
-void decoupe_saisie(char *entree)
+typejeton* decoupe_saisie(char *entree)
 {
+    format_text(entree);
+
     char buffer[10];
     int tailleTab = 0, indexBuffer = 0;
-    float valeur;
-    typelexem lexem;
-    typeoperateur operator;
-    typefonction function;
+    float valeur = 0;
+    typelexem lexem = -1;
+    typeoperateur operator= - 1;
+    typefonction function = -1;
     typejeton *tableau = NULL;
+    typevaleur val;
 
     for (int i = 0; i < strlen(entree); i++)
     {
-        valeur = 0;
-        lexem = -1;
-        operator= - 1;
-        function = -1;
 
         //printf(" car : %c \n", entree[i] );
         buffer[0] = '\0';
@@ -122,11 +121,23 @@ void decoupe_saisie(char *entree)
                 {
                     function = LOG;
                 }
+                else
+                {
+                    // erreur fonction inconnu
+                    lexem = ERREUR;
+                    val.erreur = FONCTION_INCONNUE;
+                }
+            }
+            else
+            {
+                // erreur caractere inconnu
+                lexem = ERREUR;
+                val.erreur = CARACTERE_INCONNU;
             }
 
             break;
         }
-        typevaleur val;
+
         printf("\n-----------------");
         printf("\n Valeur = %lf", valeur);
         val.reel = valeur;
@@ -134,8 +145,9 @@ void decoupe_saisie(char *entree)
         val.fonction = function;
         printf("\n OPerateur = %d", operator);
         val.operateur = operator;
+        printf("\n Lexem = %d", lexem);
 
-        tableau = creation_jeton(&tableau,lexem,val,&tailleTab);
+        tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
 
         /*
         printf("\n TEST affichage typevaleur") ;
@@ -143,22 +155,30 @@ void decoupe_saisie(char *entree)
         printf("\n Fonction : %d", val.fonction);
         printf("\n Operateur : %d \n", val.operateur);      
          */
+        valeur = 0;
+        lexem = -1;
+        operator= - 1;
+        function = -1;
     }
+    lexem = FIN;
+    val.reel = valeur;
+    val.fonction = function;
+    val.operateur = operator;
 
-    // Mettre ici la fonction d'appel a l'analyse syntaxique
+    tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
+
+    return tableau;
 }
 
-typejeton* creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur valeur, int *taille)
+typejeton *creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur valeur, int *taille)
 {
     if (*taille == 0)
     {
         *tableauJeton = (typejeton *)malloc(sizeof(typejeton));
-        printf("malloc\n");
     }
     else
     {
         *tableauJeton = (typejeton *)realloc(*tableauJeton, sizeof(typejeton) * ((*taille) + 1));
-        printf("realloc\n");
     }
 
     typejeton jetonActu;
