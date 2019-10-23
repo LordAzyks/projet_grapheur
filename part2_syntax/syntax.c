@@ -5,10 +5,13 @@
 
 //On recoit en entrée un tableau de typejeton
 
-Arbre analyse_syntaxe(typejeton* tableau_jeton, int taille)
+Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_string)
 {
-    Arbre arbre = creation_noeud(tableau_jeton,taille);
+    int* taille;
+    typejeton* tableau_jeton;
+    tableau_jeton = decoupe_saisi(fonction_string, taille);
 
+    Arbre arbre = creation_noeud(tableau_jeton,*taille);
     return arbre;
 }
 
