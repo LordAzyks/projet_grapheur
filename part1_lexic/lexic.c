@@ -13,7 +13,7 @@ void format_text(char *origine)
     origine[count] = '\0';
 }
 
-typejeton* decoupe_saisie(char *entree)
+typejeton* decoupe_saisie(char *entree, int *taillejeton)
 {
     format_text(entree);
 
@@ -166,6 +166,7 @@ typejeton* decoupe_saisie(char *entree)
     val.operateur = operator;
 
     tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
+    *taillejeton = tailleTab;
 
     return tableau;
 }
