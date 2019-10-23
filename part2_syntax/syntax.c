@@ -18,6 +18,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
     if (tableau_jeton[0].lexem==FIN)
         return NULL;
 
+    afficher_tabjeton(tableau_jeton,taille);
     Arbre noeud_courant = (Arbre)malloc(sizeof(Node));
     noeud_courant->pjeton_preced = NULL;
     noeud_courant->pjeton_suiv   = NULL;
@@ -79,15 +80,16 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             ind_par_ferm=indice_derniere_par_ferm(tableau_jeton,taille,0);
             if (tableau_jeton[ind_par_ferm+1].lexem==OPERATEUR)
             {
+                printf("\nPAR_OUV OUI %d",ind_par_ferm);
                 noeud_courant->jeton = tableau_jeton[ind_par_ferm+1];
                 noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,1,ind_par_ferm),ind_par_ferm);
-
-                noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_par_ferm+2,taille),taille-ind_par_ferm-1);
+                noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_par_ferm+2,taille),taille-ind_par_ferm);
             }
             if (tableau_jeton[ind_par_ferm+1].lexem==FIN)
             {
+                printf("\nPAR_OUV NON %d",ind_par_ferm);
                 free(noeud_courant);
-                noeud_courant = creation_noeud(subtab(tableau_jeton,1,taille-1),taille+1);
+                noeud_courant = creation_noeud(subtab(tableau_jeton,1,taille-1),taille-1);
             }
             break;
         case PAR_FERM   : break;
@@ -139,7 +141,7 @@ int indice_derniere_par_ferm(typejeton* tableau_jeton, int taille,int indic_par_
     int nb_par_ouv=0;
     int indice_para_ferm=-1;
     int i_jeton;
-    for (i_jeton=taille-1;i_jeton>=0;i_jeton--)
+    for (i_jeton=indic_par_ouv+1;i_jeton<taille-1;i_jeton++)
     {
         if (tableau_jeton[i_jeton].lexem==PAR_OUV)
         {
@@ -176,6 +178,17 @@ int indice_operateur(typejeton* tableau_jeton, int taille) //return -1 si pas d'
     }
 
     return indice_operateur;
+}
+
+void afficher_tabjeton(typejeton* tableau_jeton, int taille)
+{
+    printf("\n");
+
+    int i_jeton=0;
+    for (i_jeton=0; i_jeton < taille; i_jeton++)
+    {
+        printf("[%d]",tableau_jeton[i_jeton].lexem);
+    }
 }
 
 
