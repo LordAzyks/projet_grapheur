@@ -76,7 +76,6 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
         case ERREUR     : break;
         case FIN        : break;
         case PAR_OUV    :
-            printf("\nPAR_OUV");
             ind_par_ferm=indice_derniere_par_ferm(tableau_jeton,taille,0);
             if (tableau_jeton[ind_par_ferm+1].lexem==OPERATEUR)
             {
@@ -89,7 +88,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 printf("\nPAR_OUV NON %d",ind_par_ferm);
                 free(noeud_courant);
-                noeud_courant = creation_noeud(subtab(tableau_jeton,1,taille-1),taille-1);
+                noeud_courant = creation_noeud(subtab(tableau_jeton,1,ind_par_ferm),ind_par_ferm);
             }
             break;
         case PAR_FERM   : break;
