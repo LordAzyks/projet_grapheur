@@ -1,6 +1,6 @@
 #ifndef SYNTAX_H_INCLUDED
 #define SYNTAX_H_INCLUDED
-#include "../jeton.h"
+#include "../part1_lexic/lexic.h"
 
 Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_string);
 typejeton* subtab(typejeton* tableau_jeton, int index_deb, int index_fin);

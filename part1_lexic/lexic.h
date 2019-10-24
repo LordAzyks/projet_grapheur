@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include "../jeton.h"
 
 void format_text(char *origine);

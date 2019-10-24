@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include "../jeton.h"
+#include "../part2_syntax/syntax.h"
 
 double Sinus(double X);
 

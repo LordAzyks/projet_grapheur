@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "../jeton.h"
 #include "./syntax.h"
 
-//On recoit en entrée un tableau de typejeton
+//On recoit en entrï¿½e un tableau de typejeton
 
 Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_string)
 {
