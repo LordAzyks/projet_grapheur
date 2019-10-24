@@ -3,6 +3,11 @@
 
 typedef enum
 {
+    DIV_0,SYNTAX_ERR,RACINE_NEG
+}typeerreur;
+
+typedef enum
+{//    0         1        2      3   4       5        6        7       8       9     10
     REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
 }typelexem;
 
