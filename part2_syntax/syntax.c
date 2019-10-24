@@ -5,13 +5,13 @@
 
 //On recoit en entrée un tableau de typejeton
 
-Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_string)
+Arbre analyse_syntaxe(typejeton* tableau_jeton, int taille/*,char* fonction_string*/)
 {
-    int* taille;
+    /*int* taille;
     typejeton* tableau_jeton;
     tableau_jeton = decoupe_saisi(fonction_string, taille);
-
-    Arbre arbre = creation_noeud(tableau_jeton,*taille);
+    */
+    Arbre arbre = creation_noeud(tableau_jeton,taille);
     return arbre;
 }
 
@@ -46,7 +46,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             break;
         case OPERATEUR  : break;
         case FONCTION   :
-            printf("\nFONCTION");
+            printf("\nFONCTION %d", tableau_jeton[0].valeur.reel);
             if (tableau_jeton[1].lexem!=PAR_OUV)
             {
                 noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
@@ -189,7 +189,7 @@ void afficher_tabjeton(typejeton* tableau_jeton, int taille)
     int i_jeton=0;
     for (i_jeton=0; i_jeton < taille; i_jeton++)
     {
-        printf("[%d]",tableau_jeton[i_jeton].lexem);
+        printf("[%d:%f]",tableau_jeton[i_jeton].lexem,tableau_jeton[i_jeton].valeur.reel);
     }
 }
 
