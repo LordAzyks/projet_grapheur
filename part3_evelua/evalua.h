@@ -1,3 +1,5 @@
+#include <math.h>
+
 #include "../part2_syntax/syntax.h"
 
 float** calculValeur(float borneMin, float borneMax, float pas, char *chaine);

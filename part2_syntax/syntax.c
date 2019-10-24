@@ -4,17 +4,25 @@
 
 Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_string)
 {
-    int* taille;
+    int taille;
     typejeton* tableau_jeton;
-    tableau_jeton = decoupe_saisi(fonction_string, taille);
+    tableau_jeton = decoupe_saisie(fonction_string, &taille);
+    for(int i = 0;i<taille;i++){
+        printf("\n--------SYNTAX---------");
+        typejeton jeton = tableau_jeton[i];
+        printf("\n Valeur = %lf", jeton.valeur);
+        printf("\n Fonction = %d", jeton.valeur.fonction);
+        printf("\n OPerateur = %d", jeton.valeur.operateur);
+        printf("\n Lexem = %d", jeton.lexem);
+    }
 
-    Arbre arbre = creation_noeud(tableau_jeton,*taille);
+    Arbre arbre = creation_noeud(tableau_jeton,taille);
     return arbre;
 }
 
 Arbre creation_noeud(typejeton* tableau_jeton, int taille)
 {
-    printf("\njeton courant:lexem %d",tableau_jeton[0].lexem);
+    afficher_typejeton(tableau_jeton[0]);
     if (tableau_jeton[0].lexem==FIN)
         return NULL;
 
@@ -43,7 +51,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             break;
         case OPERATEUR  : break;
         case FONCTION   :
-            printf("\nFONCTION");
+            printf("\nFONCTION %d", tableau_jeton[0].valeur.fonction);
             if (tableau_jeton[1].lexem!=PAR_OUV)
             {
                 noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
@@ -190,5 +198,41 @@ void afficher_tabjeton(typejeton* tableau_jeton, int taille)
     }
 }
 
+void afficher_typejeton(typejeton jeton)
+{
+    printf("\n--==JETON==--");
+    switch (jeton.lexem)
+    {//REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
+        case 0: printf("\nREEL"); break;
+        case 1: printf("\nOPERATEUR"); break;
+        case 2: printf("\nFONCTION"); break;
+        case 3: printf("\nERREUR"); break;
+        case 4: printf("\nFIN"); break;
+        case 5: printf("\nPAR_OUV"); break;
+        case 6: printf("\nPAR_FERM"); break;
+        case 7: printf("\nVARIABLE"); break;
+        case 8: printf("\nBAR_OUV"); break;
+        case 9: printf("\nBAR_FER"); break;
+        case 10: printf("\nABSOLU"); break;
+        default: printf("AUTRE"); break;
+    }
 
+    switch (jeton.lexem)
+    {//REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
+        case 0: 
+            printf("\nvaleur : %f",jeton.valeur.reel);
+            break;
+        case 1: 
+            printf("\nvaleur : %d",jeton.valeur.operateur);
+            break;
+        case 2:
+            printf("\nvaleur : %f",jeton.valeur.reel);
+            break;
+        case 3: 
+            printf("\nvaleur : %d",jeton.valeur.erreur);
+            break;
+        default: printf("\nPas de valeur");
+    }
+    printf("\n--=======--");
+}
 

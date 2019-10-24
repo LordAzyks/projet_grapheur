@@ -1,7 +1,9 @@
 #include "lexic.h"
 
-void format_text(char *origine)
+void format_text(char *func)
 {
+    char* origine = (char*)malloc(sizeof(char)*(strlen(func)+1));
+    strcpy(origine,func);
     int count = 0;
 
     for (int i = 0; origine[i]; i++)
@@ -13,7 +15,7 @@ void format_text(char *origine)
     origine[count] = '\0';
 }
 
-typejeton* decoupe_saisie(char *entree)
+typejeton* decoupe_saisie(char *entree, int *taille_jeton)
 {
     format_text(entree);
 
@@ -138,7 +140,7 @@ typejeton* decoupe_saisie(char *entree)
             break;
         }
 
-        printf("\n-----------------");
+        printf("\n--------LEXIC---------");
         printf("\n Valeur = %lf", valeur);
         val.reel = valeur;
         printf("\n Fonction = %d", function);
@@ -166,6 +168,7 @@ typejeton* decoupe_saisie(char *entree)
     val.operateur = operator;
 
     tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
+    *taille_jeton = tailleTab;
 
     return tableau;
 }

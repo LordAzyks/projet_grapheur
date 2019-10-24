@@ -3,7 +3,7 @@
 
 typedef enum
 {
-    DIV_0,SYNTAX_ERR,RACINE_NEG
+    DIV_0,SYNTAX_ERR,RACINE_NEG,FONCTION_INCONNUE,CARACTERE_INCONNU
 }typeerreur;
 
 typedef enum
@@ -16,19 +16,11 @@ typedef enum
     PLUS,MOINS,FOIS,DIV,PUIS
 }typeoperateur;
 
-typedef enum{
-    FONCTION_INCONNUE,CARACTERE_INCONNU
-}typeerreur;
 
 typedef enum
 {
     ABS,SIN,SQRT,LOG,COS,TAN,EXP,ENTIER,VAL_NEG,SINC
 }typefonction;
-
-typedef enum
-{
-	ARBRE,OPERATION
-}typeerreur;
 
 typedef union
 {
