@@ -7,4 +7,4 @@
 
 void format_text(char *origine);
 typejeton* decoupe_saisie(char *entree, int *taille_jeton);
-typejeton* creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur valeur, int *taille);
+typejeton* creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur *valeur, int *taille);
