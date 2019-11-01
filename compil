@@ -1,3 +1,4 @@
-gcc part4_graphic/graphic.c part3_evelua/evalua.c part2_syntax/syntax.c part1_lexic/lexic.c -lglut -lGLU -lGL -lm  -o test -g
+gcc part4_graphic/graphic.c part3_evelua/evalua.c part2_syntax/syntax.c part1_lexic/lexic.c -lglut -lGLU -lGL -lm -lAntTweakBar  -o test
 ./test
+#part2_syntax/syntax.c part1_lexic/lexic.c
 #-Wall -g3 -fsanitize=address

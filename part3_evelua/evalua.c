@@ -116,3 +116,15 @@ float** calculValeur(float borneMin, float borneMax, float pas, char *chaine){
 	}
 	return resultats;
 }
+
+void tempmain(){
+	float borneMin = -5.0;
+	float borneMax = 5.0;
+	float pas = 0.5;
+	float** tab = calculValeur(borneMin, borneMax, pas, "sin(x+2)");
+	int i = (borneMax - borneMin) / pas;
+	while(i--){
+		printf("x=%f, y=%f\n",tab[i][0],tab[i][1]);
+	}
+}
+
