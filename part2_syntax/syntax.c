@@ -77,7 +77,8 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 printf("\nNON");
                 noeud_courant->jeton = tableau_jeton[0];
-                noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,2,ind_par_ferm),ind_par_ferm-1);
+                //noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,2,ind_par_ferm),ind_par_ferm-1);
+                noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton,2,ind_par_ferm),ind_par_ferm-1);
             }//sqrt(25)*x
 
 
@@ -222,20 +223,82 @@ void afficher_typejeton(typejeton jeton)
 
     switch (jeton.lexem)
     {//REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
-        case 0: 
+        case 0:
             printf("\nvaleur : %f",jeton.valeur.reel);
             break;
-        case 1: 
+        case 1:
             printf("\nvaleur : %d",jeton.valeur.operateur);
             break;
         case 2:
             printf("\nvaleur : %f",jeton.valeur.reel);
             break;
-        case 3: 
+        case 3:
             printf("\nvaleur : %d",jeton.valeur.erreur);
             break;
         default: printf("\nPas de valeur");
     }
     printf("\n--=======--");
+}
+
+void afficher_arbre(Arbre arbre)
+{
+    switch (arbre->jeton.lexem)
+    {
+        case REEL       : printf("REEL[%f]",arbre->jeton.valeur.reel); break;
+        case OPERATEUR  : printf("OPERATEUR[%f]",arbre->jeton.valeur.operateur); break;
+        case FONCTION   : printf("FONCTION[%f]",arbre->jeton.valeur.fonction); break;
+        case ERREUR     : printf("ERREUR[%f]",arbre->jeton.valeur.erreur); break;
+        case FIN        : printf("FIN"); break;
+        case PAR_OUV    : printf("PAR_OUV"); break;
+        case PAR_FERM   : printf("PAR_FERM"); break;
+        case VARIABLE   : printf("VARIABLE"); break;
+        case BAR_OUV    : printf("BAR_OUV"); break;
+        case BAR_FER    : printf("BAR_FER"); break;
+        case ABSOLU     : printf("ABSOLU"); break;
+    }
+
+    if (arbre->pjeton_preced!=NULL)
+    {
+        switch (arbre->pjeton_preced->jeton.lexem)
+        {
+            case REEL       : printf(" PREC:REEL[%f]",arbre->pjeton_preced->jeton.valeur.reel); break;
+            case OPERATEUR  : printf(" PREC:OPERATEUR[%f]",arbre->pjeton_preced->jeton.valeur.operateur); break;
+            case FONCTION   : printf(" PREC:FONCTION[%f]",arbre->pjeton_preced->jeton.valeur.fonction); break;
+            case ERREUR     : printf(" PREC:ERREUR[%f]",arbre->pjeton_preced->jeton.valeur.erreur); break;
+            case FIN        : printf(" PREC:FIN"); break;
+            case PAR_OUV    : printf(" PREC:PAR_OUV"); break;
+            case PAR_FERM   : printf(" PREC:PAR_FERM"); break;
+            case VARIABLE   : printf(" PREC:VARIABLE"); break;
+            case BAR_OUV    : printf(" PREC:BAR_OUV"); break;
+            case BAR_FER    : printf(" PREC:BAR_FER"); break;
+            case ABSOLU     : printf(" PREC:ABSOLU"); break;
+        }
+    }
+    else
+        printf(" PREC:NULL");
+
+    if (arbre->pjeton_suiv!=NULL)
+    {
+        switch (arbre->pjeton_suiv->jeton.lexem)
+        {
+            case REEL       : printf(" SUIV:REEL[%f]\n",arbre->pjeton_suiv->jeton.valeur.reel); break;
+            case OPERATEUR  : printf(" SUIV:OPERATEUR[%f]\n",arbre->pjeton_suiv->jeton.valeur.operateur); break;
+            case FONCTION   : printf(" SUIV:FONCTION[%f]",arbre->pjeton_suiv->jeton.valeur.reel); break;
+            case ERREUR     : printf(" SUIV:ERREUR[%f]\n",arbre->pjeton_suiv->jeton.valeur.erreur); break;
+            case FIN        : printf(" SUIV:FIN\n"); break;
+            case PAR_OUV    : printf(" SUIV:PAR_OUV\n"); break;
+            case PAR_FERM   : printf(" SUIV:PAR_FERM\n"); break;
+            case VARIABLE   : printf(" SUIV:VARIABLE\n"); break;
+            case BAR_OUV    : printf(" SUIV:BAR_OUV\n"); break;
+            case BAR_FER    : printf(" SUIV:BAR_FER\n"); break;
+            case ABSOLU     : printf(" SUIV:ABSOLU\n"); break;
+        }
+    }
+    else
+        printf(" SUIV:NULL\n");
+
+    if (arbre->pjeton_preced!=NULL)  afficher_arbre(arbre->pjeton_preced);
+    if (arbre->pjeton_suiv!=NULL) afficher_arbre(arbre->pjeton_suiv);
+
 }
 
