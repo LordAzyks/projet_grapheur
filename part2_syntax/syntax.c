@@ -10,10 +10,11 @@ Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char* fonction_s
     for(int i = 0;i<taille;i++){
         printf("\n--------SYNTAX---------");
         typejeton jeton = tableau_jeton[i];
-        printf("\n Valeur = %lf", jeton.valeur);
+        printf("\n Valeur = %f", jeton.valeur.reel);
         printf("\n Fonction = %d", jeton.valeur.fonction);
         printf("\n OPerateur = %d", jeton.valeur.operateur);
         printf("\n Lexem = %d", jeton.lexem);
+        //afficher_tabjeton(tableau_jeton,taille);
     }
 
     Arbre arbre = creation_noeud(tableau_jeton,taille);
@@ -54,7 +55,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             printf("\nFONCTION %d", tableau_jeton[0].valeur.fonction);
             if (tableau_jeton[1].lexem!=PAR_OUV)
             {
-                noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
+                noeud_courant->jeton = (typejeton){ERREUR,  {0,0,0,SYNTAX_ERR}};
                 printf("\nlexem exit : %d",tableau_jeton[1].lexem);
                 exit(1);
             }
@@ -64,7 +65,7 @@ Arbre creation_noeud(typejeton* tableau_jeton, int taille)
             {
                 if (tableau_jeton[ind_par_ferm+1].lexem!=OPERATEUR)
                 {
-                    noeud_courant->jeton = (typejeton){ERREUR,  {0,NULL,NULL,SYNTAX_ERR}};
+                    noeud_courant->jeton = (typejeton){ERREUR,  {0,0,0,SYNTAX_ERR}};
                     exit(1);
                 }
 
@@ -130,7 +131,7 @@ typejeton* subtab(typejeton* tableau_jeton, int index_deb, int index_fin)
     for (i_jeton=index_deb; i_jeton<index_fin+1;i_jeton++)
     {
         if (i_jeton==index_fin)
-            subtableau[i_jeton-index_deb] = (typejeton){FIN,{0,NULL,NULL,NULL}};
+            subtableau[i_jeton-index_deb] = (typejeton){FIN,{0,0,0,0}};
         else
         {
             subtableau[i_jeton-index_deb] = tableau_jeton[i_jeton];
@@ -194,13 +195,15 @@ void afficher_tabjeton(typejeton* tableau_jeton, int taille)
     int i_jeton=0;
     for (i_jeton=0; i_jeton < taille; i_jeton++)
     {
+        printf("\n--==JETON %d==--",i_jeton);
         printf("[%d]",tableau_jeton[i_jeton].lexem);
+        afficher_typejeton(tableau_jeton[i_jeton]);
     }
 }
 
 void afficher_typejeton(typejeton jeton)
 {
-    printf("\n--==JETON==--");
+    //printf("\n--==JETON==--");
     switch (jeton.lexem)
     {//REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
         case 0: printf("\nREEL"); break;

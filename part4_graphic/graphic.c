@@ -64,7 +64,7 @@ void display(void)
     {
         glPushMatrix();
 
-        curve(-5.0, 5.0, 0.1, "log(x+25)");
+        curve(-5.0, 5.0, 0.1, "sin(x-25)");
         glPopMatrix();
     }
     glFlush();

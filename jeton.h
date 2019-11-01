@@ -22,9 +22,9 @@ typedef enum
     ABS,SIN,SQRT,LOG,COS,TAN,EXP,ENTIER,VAL_NEG,SINC
 }typefonction;
 
-typedef union
+typedef struct
 {
-    float reel;
+    double reel;
     typefonction fonction;
     typeoperateur operateur;
     typeerreur erreur;
