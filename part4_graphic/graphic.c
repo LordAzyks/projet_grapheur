@@ -10,19 +10,19 @@ static int menu_id;
 static int submenu_id;
 static int value = 0;
 
-char g_func[100] = "cos(log(abs(x)))";
+char g_func[100] = "x*sin(abs(x))";
 char g_func_control[100] = "";
 
 float g_Zoom = 1.0f;
 float** g_tab;
-float g_minX = -5.0;
+float g_minX = -300.0;
 float g_minX_control = 0;
-float g_maxX = 5.0;
+float g_maxX = 300.0;
 float g_maxX_control = 0;
 
-float g_minY = -5.0;
-float g_maxY = 5.0;
-float g_pas = 1.0;
+float g_minY = -300.0;
+float g_maxY = 300.0;
+float g_pas = 3.0;
 
 float g_curveColor[3] = {0.0, 0.7, 0.35};
 
@@ -30,15 +30,6 @@ void curve()
 {   
     int nbVal = (g_maxX - g_minX) / g_pas;
     g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
-    /*  if(strcmp(g_func,g_func_control)){
-        strcpy(g_func_control,g_func);
-    }else if(g_minX != g_minX_control) {
-        g_minX_control = g_minX;
-        g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
-    } else if(g_maxX != g_maxX_control) {
-        g_maxX_control = g_maxX;
-        g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
-    } */
 
     glScalef(2/(fabs(g_minX)+fabs(g_maxX)),2/(fabs(g_minY)+fabs(g_maxY)),1);
     glTranslatef(-(g_minX+g_maxX)/2,-(g_minY+g_maxY)/2,0);
@@ -61,10 +52,11 @@ void curve()
     {
         glBegin(GL_LINES);
         {
-            float x1 = g_tab[i][0]/* <0 ? g_tab[i][0]/fabs(g_minX) : g_tab[i][0]/g_maxX */;
-            float y1 = g_tab[i][1]/* <0 ? g_tab[i][1]/fabs(g_minY) : g_tab[i][1]/g_maxY */;
-            float x2 = g_tab[i+1][0]/* <0 ? g_tab[i+1][0]/fabs(g_minX) : g_tab[i+1][0]/g_maxX */;
-            float y2 = g_tab[i+1][1]/* <0 ? g_tab[i+1][1]/fabs(g_minY) : g_tab[i+1][1]/g_maxY */;
+            float x1 = g_tab[i][0];
+            float y1 = g_tab[i][1];
+            float x2 = g_tab[i+1][0];
+            float y2 = g_tab[i+1][1];
+            
             glVertex2f(x1, y1);
             glVertex2f(x2, y2);
         }
