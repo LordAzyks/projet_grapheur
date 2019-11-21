@@ -57,7 +57,7 @@ float prefixeArbre(Arbre arb, float var){
 					return prefixeArbre(arb->pjeton_preced,var)*(-1);
 					break;	
 				case SINC:
-					return sin(prefixeArbre(arb->pjeton_preced,var))/preffixeArbre(arb->pjeton_preced,var);
+					return sin(prefixeArbre(arb->pjeton_preced,var))/prefixeArbre(arb->pjeton_preced,var);
 					break;	
 				default:
 					return 0;
@@ -97,22 +97,34 @@ float prefixeArbre(Arbre arb, float var){
 }
 
 float** calculValeur(float borneMin, float borneMax, float pas, char *chaine){
-	int j =0;
+	int j = 0;
 	float i;
 	int nbValues;
 	nbValues = (borneMax-borneMin)/pas;
 	//float resultat[nbValues][2];
 	float** resultats;
-	resultats = (float**)malloc(nbValues*sizeof(float*));
+	resultats = (float**)malloc((nbValues+2)*sizeof(float*));
 	Arbre tree = analyse_syntaxe(chaine);
-	printf("BorneMin = %f, BorneMax = %f, Pas = %f\n",borneMin,borneMax,pas);	
+	// printf("BorneMin = %f, BorneMax = %f, Pas = %f\n",borneMin,borneMax,pas);	
 	
 	for(i=borneMin; i<=borneMax+pas; i=i+pas){
 			resultats[j] = (float*)malloc(2*sizeof(float));			
 			resultats[j][0] = i;
 			resultats[j][1] = prefixeArbre(tree, i);
-			//printf("X = %f ; Valeur : %f\n",i,preffixeArbre(tri,i));
+			// printf("X = %f ; Valeur : %f\n",i,prefixeArbre(tree,i));
 			j++;
 	}
 	return resultats;
 }
+
+void tempmain(){
+	float borneMin = -5.0;
+	float borneMax = 5.0;
+	float pas = 0.5;
+	float** tab = calculValeur(borneMin, borneMax, pas, "sin(x+2)");
+	int i = (borneMax - borneMin) / pas;
+	while(i--){
+		printf("x=%f, y=%f\n",tab[i][0],tab[i][1]);
+	}
+}
+

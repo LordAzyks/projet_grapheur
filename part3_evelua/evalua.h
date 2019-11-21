@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <math.h>
-#include "../jeton.h"
+
+#include "../part2_syntax/syntax.h"
 
 float** calculValeur(float borneMin, float borneMax, float pas, char *chaine);
 

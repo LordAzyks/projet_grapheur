@@ -3,54 +3,72 @@
 
 typedef enum
 {
-    DIV_0,SYNTAX_ERR,RACINE_NEG
-}typeerreur;
+    DIV_0,
+    SYNTAX_ERR,
+    RACINE_NEG,
+    FONCTION_INCONNUE,
+    CARACTERE_INCONNU
+} typeerreur;
 
 typedef enum
-{//    0         1        2      3   4       5        6        7       8       9     10
-    REEL,OPERATEUR,FONCTION,ERREUR,FIN,PAR_OUV,PAR_FERM,VARIABLE,BAR_OUV,BAR_FER,ABSOLU
-}typelexem;
+{ //    0         1        2      3   4       5        6        7       8       9     10
+    REEL,
+    OPERATEUR,
+    FONCTION,
+    ERREUR,
+    FIN,
+    PAR_OUV,
+    PAR_FERM,
+    VARIABLE,
+    BAR_OUV,
+    BAR_FER,
+    ABSOLU
+} typelexem;
 
 typedef enum
 {
-    PLUS,MOINS,FOIS,DIV,PUIS
-}typeoperateur;
-
-typedef enum{
-    FONCTION_INCONNUE,CARACTERE_INCONNU
-}typeerreur;
-
-typedef enum
-{
-    ABS,SIN,SQRT,LOG,COS,TAN,EXP,ENTIER,VAL_NEG,SINC
-}typefonction;
+    PLUS,
+    MOINS,
+    FOIS,
+    DIV,
+    PUIS
+} typeoperateur;
 
 typedef enum
 {
-	ARBRE,OPERATION
-}typeerreur;
+    ABS,
+    SIN,
+    SQRT,
+    LOG,
+    COS,
+    TAN,
+    EXP,
+    ENTIER,
+    VAL_NEG,
+    SINC
+} typefonction;
 
 typedef union
 {
-    float reel;
+    double reel;
     typefonction fonction;
     typeoperateur operateur;
     typeerreur erreur;
-}typevaleur;
+} typevaleur;
 
 typedef struct
 {
     typelexem lexem;
     typevaleur valeur;
-}typejeton;
+} typejeton;
 
 typedef struct Node
 {
     typejeton jeton;
     struct Node *pjeton_preced;
     struct Node *pjeton_suiv;
-}Node;
+} Node;
 
-typedef Node* Arbre;
+typedef Node *Arbre;
 
 #endif // JETON_H_INCLUDED

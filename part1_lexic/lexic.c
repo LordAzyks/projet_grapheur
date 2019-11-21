@@ -1,7 +1,9 @@
 #include "lexic.h"
 
-void format_text(char *origine)
+void format_text(char *func)
 {
+    char *origine = (char *)malloc(sizeof(char) * (strlen(func) + 1));
+    strcpy(origine, func);
     int count = 0;
 
     for (int i = 0; origine[i]; i++)
@@ -13,7 +15,7 @@ void format_text(char *origine)
     origine[count] = '\0';
 }
 
-typejeton* decoupe_saisie(char *entree)
+typejeton *decoupe_saisie(char *entree, int *taille_jeton)
 {
     format_text(entree);
 
@@ -24,11 +26,11 @@ typejeton* decoupe_saisie(char *entree)
     typeoperateur operator= - 1;
     typefonction function = -1;
     typejeton *tableau = NULL;
-    typevaleur val;
+    typevaleur *val;
 
     for (int i = 0; i < strlen(entree); i++)
     {
-
+        val = malloc(sizeof(typevaleur));
         //printf(" car : %c \n", entree[i] );
         buffer[0] = '\0';
         indexBuffer = 0;
@@ -39,23 +41,23 @@ typejeton* decoupe_saisie(char *entree)
             break;
         case '+':
             lexem = OPERATEUR;
-            operator= PLUS;
+            val->operateur = PLUS;
             break;
         case '-':
             lexem = OPERATEUR;
-            operator= MOINS;
+            val->operateur = MOINS;
             break;
         case '*':
             lexem = OPERATEUR;
-            operator= FOIS;
+            val->operateur = FOIS;
             break;
         case '/':
             lexem = OPERATEUR;
-            operator= DIV;
+            val->operateur = DIV;
             break;
         case '^':
             lexem = OPERATEUR;
-            operator= PUIS;
+            val->operateur = PUIS;
             break;
         case '(':
             lexem = PAR_OUV;
@@ -77,7 +79,7 @@ typejeton* decoupe_saisie(char *entree)
                 i--;
                 buffer[indexBuffer] = '\0';
                 lexem = REEL;
-                valeur = atof(buffer);
+                val->reel = atof(buffer);
             }
             else if (entree[i] >= 'a' && entree[i] <= 'z')
             {
@@ -94,58 +96,49 @@ typejeton* decoupe_saisie(char *entree)
 
                 if ((strcmp(buffer, "abs")) == 0)
                 {
-                    function = ABS;
+                    val->fonction = ABS;
                 }
                 else if ((strcmp(buffer, "sin")) == 0)
                 {
-                    function = SIN;
-                    //printf("\n SIN = %d", function);
+                    val->fonction = SIN;
                 }
                 else if ((strcmp(buffer, "cos")) == 0)
                 {
-                    function = COS;
+                    val->fonction = COS;
                 }
                 else if ((strcmp(buffer, "tan")) == 0)
                 {
-                    function = TAN;
+                    val->fonction = TAN;
                 }
                 else if ((strcmp(buffer, "exp")) == 0)
                 {
-                    function = EXP;
+                    val->fonction = EXP;
                 }
                 else if ((strcmp(buffer, "sqrt")) == 0)
                 {
-                    function = SQRT;
+                    val->fonction = SQRT;
                 }
                 else if ((strcmp(buffer, "log")) == 0)
                 {
-                    function = LOG;
+                    val->fonction = LOG;
                 }
                 else
                 {
                     // erreur fonction inconnu
                     lexem = ERREUR;
-                    val.erreur = FONCTION_INCONNUE;
+                    val->erreur = FONCTION_INCONNUE;
                 }
             }
             else
             {
                 // erreur caractere inconnu
                 lexem = ERREUR;
-                val.erreur = CARACTERE_INCONNU;
+                val->erreur = CARACTERE_INCONNU;
             }
 
             break;
         }
 
-        printf("\n-----------------");
-        printf("\n Valeur = %lf", valeur);
-        val.reel = valeur;
-        printf("\n Fonction = %d", function);
-        val.fonction = function;
-        printf("\n OPerateur = %d", operator);
-        val.operateur = operator;
-        printf("\n Lexem = %d", lexem);
 
         tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
 
@@ -155,22 +148,19 @@ typejeton* decoupe_saisie(char *entree)
         printf("\n Fonction : %d", val.fonction);
         printf("\n Operateur : %d \n", val.operateur);      
          */
-        valeur = 0;
         lexem = -1;
-        operator= - 1;
-        function = -1;
     }
     lexem = FIN;
-    val.reel = valeur;
-    val.fonction = function;
-    val.operateur = operator;
+    val = malloc(sizeof(typevaleur));
+    val->reel = 0;
 
     tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
+    *taille_jeton = tailleTab;
 
     return tableau;
 }
 
-typejeton *creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur valeur, int *taille)
+typejeton *creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur *valeur, int *taille)
 {
     if (*taille == 0)
     {
@@ -183,7 +173,7 @@ typejeton *creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur 
 
     typejeton jetonActu;
     jetonActu.lexem = lexem;
-    jetonActu.valeur = valeur;
+    jetonActu.valeur = *valeur;
     (*tableauJeton)[*taille] = jetonActu;
 
     (*taille) += 1;
