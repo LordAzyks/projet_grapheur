@@ -72,7 +72,7 @@ Arbre analyse_syntaxe(/*typejeton* tableau_jeton, int taille,*/ char *fonction_s
     tableau_jeton = decoupe_saisie(fonction_string, &taille);
     for (int i = 0; i < taille; i++)
     {
-        typejeton jeton = tableau_jeton[i];
+        //typejeton jeton = tableau_jeton[i];
         /* printf("\n--------SYNTAX---------");
         printf("\n Valeur = %f", jeton.valeur.reel);
         printf("\n Fonction = %d", jeton.valeur.fonction);
@@ -133,7 +133,8 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         // printf("\nFONCTION %d", tableau_jeton[0].valeur.fonction);
         if (tableau_jeton[1].lexem != PAR_OUV)
         {
-            noeud_courant->jeton = (typejeton){ERREUR, {0, 0, 0, SYNTAX_ERR}};
+            noeud_courant->jeton = (typejeton){ERREUR};
+            noeud_courant->jeton.valeur = (typevaleur){.reel = 0, .fonction = -1, .operateur = -1, .erreur = SYNTAX_ERR};
             // printf("\nlexem exit : %d", tableau_jeton[1].lexem);
             exit(1);
         }
@@ -143,7 +144,8 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         {
             if (tableau_jeton[ind_par_ferm + 1].lexem != OPERATEUR)
             {
-                noeud_courant->jeton = (typejeton){ERREUR, {0, 0, 0, SYNTAX_ERR}};
+                noeud_courant->jeton = (typejeton){ERREUR};
+                noeud_courant->jeton.valeur = (typevaleur){.reel = 0, .fonction = -1, .operateur = -1, .erreur = SYNTAX_ERR};
                 exit(1);
             }
 
@@ -193,7 +195,7 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         {
             noeud_courant->jeton = tableau_jeton[ind_operateur];
             noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton, 0, ind_operateur), ind_operateur + 1);
-            noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,ind_operateur+1,taille),taille-ind_operateur);
+            noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton, ind_operateur + 1, taille), taille - ind_operateur);
         }
         break;
     case BAR_OUV:
@@ -215,8 +217,10 @@ typejeton *subtab(typejeton *tableau_jeton, int index_deb, int index_fin)
     int i_jeton;
     for (i_jeton = index_deb; i_jeton < index_fin + 1; i_jeton++)
     {
-        if (i_jeton == index_fin)
-            subtableau[i_jeton - index_deb] = (typejeton){FIN, {0, 0, 0, 0}};
+        if (i_jeton == index_fin) {
+            subtableau[i_jeton - index_deb] = (typejeton){FIN};
+            subtableau[i_jeton - index_deb].valeur = (typevaleur) {.reel = 0, .fonction = -1, .operateur = -1, .erreur = -1};
+        }
         else
         {
             subtableau[i_jeton - index_deb] = tableau_jeton[i_jeton];
@@ -279,13 +283,13 @@ void afficher_arbre(Arbre arbre)
         printf("REEL[%f]", arbre->jeton.valeur.reel);
         break;
     case OPERATEUR:
-        printf("OPERATEUR[%f]", arbre->jeton.valeur.operateur);
+        printf("OPERATEUR[%d]", arbre->jeton.valeur.operateur);
         break;
     case FONCTION:
-        printf("FONCTION[%f]", arbre->jeton.valeur.fonction);
+        printf("FONCTION[%d]", arbre->jeton.valeur.fonction);
         break;
     case ERREUR:
-        printf("ERREUR[%f]", arbre->jeton.valeur.erreur);
+        printf("ERREUR[%d]", arbre->jeton.valeur.erreur);
         break;
     case FIN:
         printf("FIN");
@@ -318,13 +322,13 @@ void afficher_arbre(Arbre arbre)
             printf(" PREC:REEL[%f]", arbre->pjeton_preced->jeton.valeur.reel);
             break;
         case OPERATEUR:
-            printf(" PREC:OPERATEUR[%f]", arbre->pjeton_preced->jeton.valeur.operateur);
+            printf(" PREC:OPERATEUR[%d]", arbre->pjeton_preced->jeton.valeur.operateur);
             break;
         case FONCTION:
-            printf(" PREC:FONCTION[%f]", arbre->pjeton_preced->jeton.valeur.fonction);
+            printf(" PREC:FONCTION[%d]", arbre->pjeton_preced->jeton.valeur.fonction);
             break;
         case ERREUR:
-            printf(" PREC:ERREUR[%f]", arbre->pjeton_preced->jeton.valeur.erreur);
+            printf(" PREC:ERREUR[%d]", arbre->pjeton_preced->jeton.valeur.erreur);
             break;
         case FIN:
             printf(" PREC:FIN");
@@ -360,13 +364,13 @@ void afficher_arbre(Arbre arbre)
             printf(" SUIV:REEL[%f]\n", arbre->pjeton_suiv->jeton.valeur.reel);
             break;
         case OPERATEUR:
-            printf(" SUIV:OPERATEUR[%f]\n", arbre->pjeton_suiv->jeton.valeur.operateur);
+            printf(" SUIV:OPERATEUR[%d]\n", arbre->pjeton_suiv->jeton.valeur.operateur);
             break;
         case FONCTION:
             printf(" SUIV:FONCTION[%f]", arbre->pjeton_suiv->jeton.valeur.reel);
             break;
         case ERREUR:
-            printf(" SUIV:ERREUR[%f]\n", arbre->pjeton_suiv->jeton.valeur.erreur);
+            printf(" SUIV:ERREUR[%d]\n", arbre->pjeton_suiv->jeton.valeur.erreur);
             break;
         case FIN:
             printf(" SUIV:FIN\n");
