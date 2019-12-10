@@ -106,6 +106,13 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
     case REEL:
         // printf("\nREEL");
         ind_operateur = indice_operateur(tableau_jeton, taille);
+
+        if (ind_operateur != 1 && ind_operateur != -1)
+        {
+            printf("Erreur : opérateur manquant.\n");
+            break;
+        }
+
         if (ind_operateur == -1)
         {
             noeud_courant->jeton = tableau_jeton[0];
@@ -116,7 +123,6 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
             noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton, 0, ind_operateur), ind_operateur + 1);
 
             noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton, ind_operateur + 1, taille), taille - ind_operateur);
-            // printf("\nprec:%d\tsuiv:%d", noeud_courant->pjeton_preced->jeton.lexem, noeud_courant->pjeton_suiv->jeton.lexem);
         }
         break;
     case FONCTION:
@@ -124,7 +130,6 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         {
             noeud_courant->jeton = (typejeton){ERREUR};
             noeud_courant->jeton.valeur = (typevaleur){.reel = 0, .fonction = -1, .operateur = -1, .erreur = SYNTAX_ERR};
-            // printf("\nlexem exit : %d", tableau_jeton[1].lexem);
             printf("Erreur : parenthèse ouvrante de fonction manquante.\n");
             break;
         }
@@ -149,11 +154,9 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         }
         else
         {
-            // printf("\nNON");
             noeud_courant->jeton = tableau_jeton[0];
-            //noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton,2,ind_par_ferm),ind_par_ferm-1);
             noeud_courant->pjeton_preced = creation_noeud(subtab(tableau_jeton, 2, ind_par_ferm), ind_par_ferm - 1);
-        } //sqrt(25)*x
+        }
 
         break;
     case FIN:
@@ -161,7 +164,7 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         break;
     case PAR_OUV:
         ind_par_ferm = indice_derniere_par_ferm(tableau_jeton, taille, 0);
-        
+
         if (ind_par_ferm == -1) {
             printf("Erreur : Parenthèse fermante manquante.\n");
             break;
@@ -181,6 +184,7 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
         }
         break;
     case PAR_FERM:
+        printf("Erreur : parenthese ouvrante manquante.\n");
         break;
     case VARIABLE:
         // printf("\nVARIABLE");
@@ -202,15 +206,11 @@ Arbre creation_noeud(typejeton *tableau_jeton, int taille)
             noeud_courant->pjeton_suiv = creation_noeud(subtab(tableau_jeton, ind_operateur + 1, taille), taille - ind_operateur);
         }
         break;
-    case BAR_OUV:
-        break;
-    case BAR_FER:
-        break;
-    case ABSOLU:
-        break;
     case ERREUR:
+        printf("Erreur : Erreur lexicale\n");
         break;
     case OPERATEUR:
+        printf("Erreur : opérateur sans opérande\n");
         break;
     default:
         printf("\nErreur : lexem inconnu.\n");
