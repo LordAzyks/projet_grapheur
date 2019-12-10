@@ -17,7 +17,7 @@ float prefixeArbre(Arbre arb, float var){
 	} else {
 		
 		//fonction		
-		if(arb->pjeton_suiv == NULL){
+		if(arb->pjeton_suiv == NULL && arb->jeton.lexem == FONCTION){
 			switch(arb->jeton.valeur.fonction){
 				case ABS:
 					return fabs(prefixeArbre(arb->pjeton_preced,var));
@@ -65,6 +65,9 @@ float prefixeArbre(Arbre arb, float var){
 			}
 			
 		//operateur		
+		} else if (arb->pjeton_suiv == NULL && arb->jeton.lexem != FONCTION)
+		{
+			return MAXFLOAT;
 		} else {
 			switch(arb->jeton.valeur.operateur) {
 				case PLUS:
@@ -111,6 +114,13 @@ float** calculValeur(float borneMin, float borneMax, float pas, char *chaine){
 			resultats[j] = (float*)malloc(2*sizeof(float));			
 			resultats[j][0] = i;
 			resultats[j][1] = prefixeArbre(tree, i);
+			if ( resultats[j][1] == MAXFLOAT ) {
+				printf("Erreur : Opérande manquant.\n");
+				resultats = (float**)realloc(resultats,2*sizeof(float*));
+				resultats[0][0] = MAXFLOAT;
+				resultats[0][1] = MAXFLOAT;
+				return resultats;
+			}
 			// printf("X = %f ; Valeur : %f\n",i,prefixeArbre(tree,i));
 			j++;
 	}

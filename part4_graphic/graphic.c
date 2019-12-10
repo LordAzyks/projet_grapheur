@@ -23,45 +23,63 @@ float g_maxX_control = 0;
 float g_minY = -300.0;
 float g_maxY = 300.0;
 float g_pas = 3.0;
+float g_pas_control = 0;
 
 float g_curveColor[3] = {0.0, 0.7, 0.35};
 
+int g_printError = 1;
+
 void curve()
 {   
-    int nbVal = (g_maxX - g_minX) / g_pas;
-    g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
-
-    glScalef(2/(fabs(g_minX)+fabs(g_maxX)),2/(fabs(g_minY)+fabs(g_maxY)),1);
-    glTranslatef(-(g_minX+g_maxX)/2,-(g_minY+g_maxY)/2,0);
-
-    glColor3f(.3,.3,.3);
-    {
-        glRectf(g_minX,g_minY,g_maxX,g_maxY);
+    int check = strcmp(g_func,g_func_control) || g_maxX != g_maxX_control || g_minX != g_minX_control || g_pas != g_pas_control;
+    if( check ) {
+        g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
+        strcpy(g_func_control,g_func);
+        g_maxX_control = g_maxX;
+        g_minX_control = g_minX;
+        g_pas_control = g_pas;
     }
 
-    glColor3f(.2,.2,.2);
-    {
-        glRectf(0.0,0.0,g_maxX,g_maxY);
-        glRectf(g_minX,g_minY,0.0,0.0);
-    }
+    if ( g_tab[0][0] != MAXFLOAT ){
+        g_printError = 1;
 
-    glColor3fv(g_curveColor);
-    glLineWidth(2.0);
-    int i = 0;
-    while (i < nbVal)
-    {
-        glBegin(GL_LINES);
+        glScalef(2/(fabs(g_minX)+fabs(g_maxX)),2/(fabs(g_minY)+fabs(g_maxY)),1);
+        glTranslatef(-(g_minX+g_maxX)/2,-(g_minY+g_maxY)/2,0);
+
+        glColor3f(.3,.3,.3);
         {
-            float x1 = g_tab[i][0];
-            float y1 = g_tab[i][1];
-            float x2 = g_tab[i+1][0];
-            float y2 = g_tab[i+1][1];
-            
-            glVertex2f(x1, y1);
-            glVertex2f(x2, y2);
+            glRectf(g_minX,g_minY,g_maxX,g_maxY);
         }
-        glEnd();
-        i++;
+
+        glColor3f(.2,.2,.2);
+        {
+            glRectf(0.0,0.0,g_maxX,g_maxY);
+            glRectf(g_minX,g_minY,0.0,0.0);
+        }
+
+        glColor3fv(g_curveColor);
+        glLineWidth(2.0);
+        
+        int i = 0;
+        int nbVal = (g_maxX - g_minX) / g_pas;
+        while (i < nbVal)
+        {
+            glBegin(GL_LINES);
+            {
+                float x1 = g_tab[i][0];
+                float y1 = g_tab[i][1];
+                float x2 = g_tab[i+1][0];
+                float y2 = g_tab[i+1][1];
+                
+                glVertex2f(x1, y1);
+                glVertex2f(x2, y2);
+            }
+            glEnd();
+            i++;
+        }
+    } else if ( g_printError ){
+        printf("Erreur : Aucune valeur à afficher\n");
+        g_printError = 0;
     }
 }
 
