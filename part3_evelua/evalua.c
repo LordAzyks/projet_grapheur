@@ -64,14 +64,13 @@ float prefixeArbre(Arbre arb, float var){
 					return sin(prefixeArbre(arb->pjeton_preced,var))/prefixeArbre(arb->pjeton_preced,var);
 					break;
 				default:
-					return 0;
+					return MAXFLOAT;
 					break;
 			}
 
 		//operateur
 		} else if (arb->pjeton_suiv == NULL && arb->jeton.lexem != FONCTION)
 		{
-
 			return MAXFLOAT;
 		} else {
 			switch(arb->jeton.valeur.operateur) {
@@ -96,7 +95,7 @@ float prefixeArbre(Arbre arb, float var){
 					return pow(prefixeArbre(arb->pjeton_preced,var),prefixeArbre(arb->pjeton_suiv,var));
 					break;
 				default:
-					return 0;
+					return MAXFLOAT;
 					break;
 			}
 		}

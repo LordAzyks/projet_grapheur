@@ -5,6 +5,7 @@
 #include "graphic.h"
 #include "../part3_evelua/evalua.h"
 
+// Define global menu var
 static int window;
 static int menu_id;
 static int submenu_id;
@@ -31,6 +32,7 @@ int g_printError = 1;
 
 void curve()
 {   
+    // Check if function, maxX, minX and step was unchanged
     int check = strcmp(g_func,g_func_control) || g_maxX != g_maxX_control || g_minX != g_minX_control || g_pas != g_pas_control;
     if( check ) {
         g_tab = calculValeur(g_minX, g_maxX, g_pas, g_func);
@@ -43,6 +45,7 @@ void curve()
     if ( g_tab[0][0] != MAXFLOAT ){
         g_printError = 1;
 
+        // translation on X(-1,1) matrix
         glScalef(2/(fabs(g_minX)+fabs(g_maxX)),2/(fabs(g_minY)+fabs(g_maxY)),1);
         glTranslatef(-(g_minX+g_maxX)/2,-(g_minY+g_maxY)/2,0);
 
@@ -51,19 +54,22 @@ void curve()
             glRectf(g_minX,g_minY,g_maxX,g_maxY);
         }
 
+        // Draw axes
         glColor3f(.2,.2,.2);
         {
             glRectf(0.0,0.0,g_maxX,g_maxY);
             glRectf(g_minX,g_minY,0.0,0.0);
         }
 
+        // Define curve color and line width
         glColor3fv(g_curveColor);
         glLineWidth(2.0);
-        
+
         int i = 0;
         int nbVal = (g_maxX - g_minX) / g_pas;
         while (i < nbVal)
         {
+            // Curve Segment by Segment
             glBegin(GL_LINES);
             {
                 float x1 = g_tab[i][0];
@@ -83,6 +89,7 @@ void curve()
     }
 }
 
+// Function called en UP button press
 void TW_CALL zoomIn(){
     g_minX = g_minX>=-2e-2 ? -1e-2 : g_minX/2; 
     g_maxX = g_maxX<=2e-2 ? 1e-2 : g_maxX/2;
@@ -91,6 +98,7 @@ void TW_CALL zoomIn(){
     g_pas = g_maxX/100;
 }
 
+// Function called en DOWN button press
 void TW_CALL zoomOut(){
     g_minX = g_minX<=-1e4/2 ? -1e4 : g_minX*2; 
     g_maxX = g_maxX>1e4/2 ? 1e4 : g_maxX*2;
@@ -101,9 +109,11 @@ void TW_CALL zoomOut(){
 
 void display(void)
 {
+    // Clear screen
     glClearColor(.25,.25,.25,1);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // Draw the curve
     glPushMatrix();
     {
         curve();
@@ -138,7 +148,7 @@ void setGLUTeventCB(){
 }
 
 void createMenuBar(TwBar *bar){
-    // Create a tweak bar
+    // Create a tweak bar menu
     bar = TwNewBar("Menu");
     TwDefine(" GLOBAL help='Ce programme permet l affichage de fonction mathematique sous forme de graphes.\nRealisation :\n    1 - Analyse Lexicale :\n        Pierre-Antoine PAUWELS\n        Valentin PINTE\n    2 - Analyse Syntaxique :\n        Samuel OUTTIER\n        Nathan POPCZYK\n    3 - Evaluation :\n        Quentin BRANQUART\n        Lucas HADJERES\n    4 - Interface Graphique\n        Remi GUILLEMIN\n        Victor LIMOU\n\nHarmoINFO@IMT Lille-Douai' "); // Message added to the help bar.
     TwDefine(" Menu size='200 450' color='96 112 128' "); // change default tweak bar size and color
