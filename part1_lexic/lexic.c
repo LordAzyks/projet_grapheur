@@ -1,5 +1,7 @@
 #include "lexic.h"
 
+
+//Formatage du texte (Sans espace + minuscule)
 void format_text(char *func)
 {
     char *origine = (char *)malloc(sizeof(char) * (strlen(func) + 1));
@@ -15,8 +17,10 @@ void format_text(char *func)
     origine[count] = '\0';
 }
 
+//Decoupe de la saisie pour creation de jeton
 typejeton *decoupe_saisie(char *entree, int *taille_jeton)
 {
+    //Formatage du texte
     format_text(entree);
 
     char buffer[10];
@@ -28,12 +32,14 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
     typejeton *tableau = NULL;
     typevaleur *val;
 
+    //Parcours de la chaine
     for (int i = 0; i < strlen(entree); i++)
     {
         val = malloc(sizeof(typevaleur));
         //printf(" car : %c \n", entree[i] );
         buffer[0] = '\0';
         indexBuffer = 0;
+        //Si le caractere correspond a un operateur, variable ou parenthese
         switch (entree[i])
         {
         case 'x':
@@ -66,12 +72,14 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
             lexem = PAR_FERM;
             break;
         default:
-            // Prise en compte des éléments composés
+            // Sinon prise en compte des éléments composés
             buffer[1] = '\0';
+            //Si c'est un nombre
             if (entree[i] <= '9' && entree[i] >= '0')
             {
                 while ((entree[i] <= '9' && entree[i] >= '0') || (entree[i] == '.'))
                 {
+                    //Stockage dans un buffer
                     buffer[indexBuffer] = entree[i];
                     i++;
                     indexBuffer++;
@@ -81,11 +89,13 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
                 lexem = REEL;
                 val->reel = atof(buffer);
             }
+            //Sinon c'est une fonction
             else if (entree[i] >= 'a' && entree[i] <= 'z')
             {
-
-                while (entree[i] >= 'a' && entree[i] <= 'z')
+                //PArcours tant que caractere ou parenthese ou variable ou nombre
+                while (entree[i] >= 'a' && entree[i] <= 'z' && entree[i] != '(' && entree[i+1] != 'x' && !(entree[i] <= '9' && entree[i] >= '0') || (entree[i] == '.'))
                 {
+                    //Stockage dans un buffer
                     buffer[indexBuffer] = entree[i];
                     i++;
                     indexBuffer++;
@@ -93,7 +103,7 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
                 i--;
                 buffer[indexBuffer] = '\0';
                 lexem = FONCTION;
-
+                //Comparaison du buffer aux fonctions connues
                 if ((strcmp(buffer, "abs")) == 0)
                 {
                     val->fonction = ABS;
@@ -124,14 +134,14 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
                 }
                 else
                 {
-                    // erreur fonction inconnu
+                    //Erreur fonction inconnu
                     lexem = ERREUR;
                     val->erreur = FONCTION_INCONNUE;
                 }
             }
             else
             {
-                // erreur caractere inconnu
+                //Erreur caractere inconnu
                 lexem = ERREUR;
                 val->erreur = CARACTERE_INCONNU;
             }
@@ -139,35 +149,36 @@ typejeton *decoupe_saisie(char *entree, int *taille_jeton)
             break;
         }
 
-
+        //Ajout du jeton au tableau
         tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
 
-        /*
-        printf("\n TEST affichage typevaleur") ;
-        printf("\n Valeur : %lf", val.reel);
-        printf("\n Fonction : %d", val.fonction);
-        printf("\n Operateur : %d \n", val.operateur);      
-         */
+        
         lexem = -1;
     }
+    //Ajout du jeton de fin
     lexem = FIN;
     val = malloc(sizeof(typevaleur));
     val->reel = 0;
 
     tableau = creation_jeton(&tableau, lexem, val, &tailleTab);
+
+    //Taille du tableau
     *taille_jeton = tailleTab;
 
     return tableau;
 }
 
+//Creation des jetons et ajouts dans le tableau de jetons
 typejeton *creation_jeton(typejeton **tableauJeton, typelexem lexem, typevaleur *valeur, int *taille)
 {
     if (*taille == 0)
     {
+        //Si le tableau est vide
         *tableauJeton = (typejeton *)malloc(sizeof(typejeton));
     }
     else
     {
+        //Si il existe deja qque chose
         *tableauJeton = (typejeton *)realloc(*tableauJeton, sizeof(typejeton) * ((*taille) + 1));
     }
 
